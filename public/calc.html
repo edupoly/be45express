@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <input type="text" name="n1" id="n1">
+        <br>
+        <input type="text" name="n2" id="n2">
+        <br>
+        <button onclick="add()">ADD</button>
+        <button onclick="sub()">Sub</button>
+        <script>
+            function add(){
+                var n1 = document.getElementById("n1").value;
+                var n2 = document.getElementById("n2").value;
+                fetch("http://localhost:4000/cal/add",{
+                    method:"POST",
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({n1,n2})
+                }).then((res)=>{res.json()})
+                .then(data=>{console.log(data)})
+            }
+        </script>
+</body>
+</html>
