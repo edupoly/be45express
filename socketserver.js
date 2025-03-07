@@ -3,12 +3,16 @@ var app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 app.use(express.static(__dirname+"/public"))
-
+var c = 0;
 io.on('connection', (socket) => {
-    socket.emit("greet","Hello ALL")
-    socket.on("newmsg",(x)=>{console.log(x)})
-    socket.on("connect",()=>{console.log(socket.id+"::connected");})
-    socket.on("disconnect",()=>{console.log(socket.id+"::disconnected");})
+    c++;
+    console.log(socket.id+"::connected");
+    io.emit("currentviewers",c)
+    socket.on("disconnect",()=>{
+        c--;
+        console.log(socket.id+"::disconnected");
+        io.emit("currentviewers",c)
+    })
 });
 
 server.listen(4000);

@@ -6,12 +6,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello Edupoly</h1>
+    <h1>Hello Edupoly:<span id="d1"></span></h1>
     <script src="/socket.io.js"></script>
     <script>
         const socket = io();
         socket.on("greet",function(){
             console.log("Greeting received")
+        })
+        socket.on('currentviewers',function(count){
+            document.getElementById("d1").innerHTML=count;
         })
         socket.emit("newmsg","this is praveen")
     </script>
