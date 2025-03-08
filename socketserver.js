@@ -3,17 +3,21 @@ var app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 app.use(express.static(__dirname+"/public"))
-var c=0;
+var score={
+    BRZ:0,
+    IND:0
+};
 io.on('connection', (socket) => {
-    c++;
-    console.log("connection made",c)
-    io.emit("viewerscount",{count:c})
-    socket.on("disconnect",()=>{
-        c--;
-        io.emit("viewerscount",{count:c})
-        console.log("connection lost",c)
+    // socket.emit("updatescore",{...score})
+    socket.on('brazilgoal',()=>{
+        score.BRZ++
+        console.log(score);
+        io.emit("updatescore",{...score})
     })
-    
+    socket.on('indiagoal',()=>{
+        score.IND++
+        io.emit("updatescore",{...score})
+    })
 });
 
 server.listen(4000);

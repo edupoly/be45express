@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Brazil:<span id="b"></span></h1>
+    <h1>India:<span id="i"></span></h1>
+    <script src="/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on("updatescore",(score)=>{
+            console.log(score);
+            document.getElementById("b").innerHTML=score.BRZ
+            document.getElementById("i").innerHTML=score.IND
+        })
+    </script>
+</body>
+</html>
