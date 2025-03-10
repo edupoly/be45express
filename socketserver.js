@@ -8,7 +8,7 @@ var score={
     IND:0
 };
 io.on('connection', (socket) => {
-    // socket.emit("updatescore",{...score})
+    socket.emit("updatescore",{...score})
     socket.on('brazilgoal',()=>{
         score.BRZ++
         console.log(score);
