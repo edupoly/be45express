@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello <span id="us"></span></h1>
+    <ul id="d1">
+    </ul>
+    <input type="text" id="ms">
+    <button onclick="sendmessage()">Send</button>
+    <script src="/socket.io.js"></script>
+    <script>
+        
+        var un;
+        function setusername(){
+            if(window.sessionStorage.getItem("username")){
+                un = window.sessionStorage.getItem("username")
+            }
+            else{
+                un = prompt("Enter your username");
+                window.sessionStorage.setItem('username',un)
+            }
+            document.getElementById("us").innerHTML=un;
+        }
+        setusername();
+
+        const socket = io();
+        
+        socket.on("chat",(message)=>{
+            var nli = document.createElement("li")
+            var usr = document.createElement("b");
+            usr.innerHTML=message.username;
+            nli.appendChild(usr)
+            var msg = document.createElement("i")
+            msg.innerHTML=message.msg;
+            nli.appendChild(msg)
+            
+            document.getElementById("d1").appendChild(nli)
+        })
+        function sendmessage(){
+            var m = document.getElementById("ms").value;
+            socket.emit("message",{msg:m,user:un})
+        }
+    </script>
+</body>
+</html>
+
+
+
+<!-- 
+
+
+
+    -->
