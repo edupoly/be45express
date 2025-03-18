@@ -50,17 +50,16 @@ app.post("/login",function(req,res){
 })
 
 io.on('connection', (socket) => {
-    console.log("connection came");
     socket.on('message',(data)=>{
         io.emit("chat",{msg:data.msg,username:data.user})
     })
     socket.on("updateUserStatus",(details)=>{
-        console.log("details:: vasthunda",details);
-        UserModel.updateOne({username:"praveen"},{status:'online'}).then((a)=>{
-            console.log("a:::",a);
-            io.emit("updateUserStatus",{username:details.username,status:'online'})
+        console.log("details",details);
+        UserModel.findOneAndUpdate({username:details.username},{status:details.status}).then((a)=>{
+            io.emit("updateUserStatus",{username:details.username,status:details.status})
         }).catch(e=>console.log(e))
     })
+    // socket.on("disconnect",()=>{})
 });
 function checkAuth(req,res,next){
     try{
