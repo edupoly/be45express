@@ -54,12 +54,20 @@ io.on('connection', (socket) => {
         io.emit("chat",{msg:data.msg,username:data.user})
     })
     socket.on("updateUserStatus",(details)=>{
-        console.log("details",details);
-        UserModel.findOneAndUpdate({username:details.username},{status:details.status}).then((a)=>{
-            io.emit("updateUserStatus",{username:details.username,status:details.status})
+        UserModel.findOneAndUpdate({username:details.username},{status:details.status,socketid:socket.id}).then((a)=>{
+            io.emit("updateUserStatus",{username:details.username,status:details.status,socketid:socket.id})
         }).catch(e=>console.log(e))
     })
-    // socket.on("disconnect",()=>{})
+    socket.on("disconnect",()=>{
+        UserModel.findOneAndUpdate({socketid:socket.id},{status:"offline",socketid:""}).then((a)=>{
+            // console.log(a);
+            io.emit("updateUserStatus",{username:a.username,status:"offline",socketid:""})
+        }).catch(e=>console.log(e))
+    })
+    socket.on("personalMessage",(details)=>{
+        console.log("personalMsg",details);
+        socket.to(details.receiver).emit("receivedMsg",{message:"HI",sender:socket.id,username:details.username})
+    })
 });
 function checkAuth(req,res,next){
     try{
